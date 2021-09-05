@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: infinite-calls
+  labels:
+    app: infinite-calls
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: infinite-calls
+  template:
+    metadata:
+      name: infinite-calls
+      labels:
+        app: infinite-calls
+    spec:
+      containers:
+        - name: infinite-calls
+          image: busybox
+          command:
+          - /bin/sh
+          - -c
+          - |
+            COUNTER=0
+            while true; do
+             echo The counter is $COUNTER
+             let COUNTER=COUNTER+1 
+             wget -q -O- http://php-apache
+            done
