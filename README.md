@@ -2,7 +2,7 @@
 
 Kubernetes Operation and Management raises many interesting mathematical problems very similar to those I studies in Industrial Engineering. The repo is an opportunity to look at Kubernetes from another angle.
 
-## Whant to learn more about Kubernetes itself?
+## Want to learn more about Kubernetes itself?
 
 Here is a list of articles I wrote about managing Kubernetes Cluster and Improving developer experience with Kubernetes:
 
