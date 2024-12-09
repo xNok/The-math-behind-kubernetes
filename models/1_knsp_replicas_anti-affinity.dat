@@ -2,6 +2,10 @@ set APPLICATIONS := app1 app2 app3;
 set NODES := node_small node_large;
 set RESOURCES := cpu memory;
 
+set REPLICAS[app1] := 1 2;
+set REPLICAS[app2] := 1;
+set REPLICAS[app3] := 1 2 3;
+
 param r :  cpu memory :=
   app1  1   2
   app2  2   4
@@ -16,3 +20,4 @@ param cost :=
   node_large  20 ;
 
 param M := 100;
+param max_nodes := 100;

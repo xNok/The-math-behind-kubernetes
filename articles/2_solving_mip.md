@@ -1,4 +1,5 @@
-# Solving Mix-integer Programs
+# The Math behind Kubernetes - Part 2 - Solving Mix-integer Programs
+
 
 A Mixed-Integer Program (MIP) is a mathematical optimization problem where some of the variables are restricted to integer values (whole numbers), while others can take on continuous values. This is in contrast to a Linear Program (LP), where all variables can be continuous.
 
@@ -38,4 +39,8 @@ end;
 
 ```bash
 brew install glpk
+```
+
+```bash
+glpsol -m ./models/0_k8s_node_sizing_initial.mod -d ./models/0_k8s_node_sizing_initial.dat
 ```

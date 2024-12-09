@@ -1,4 +1,4 @@
-# The Math behind Kubernetes - Introduction
+# The Math behind Kubernetes - Part 1 - Introduction
 
 In less than a decade, Kubernetes has become the most popular platform for managing containerized workloads. Thanks to its distinctive configuration syntax and the numerous tools created by the community, Kubernetes is very approachable to both developers and system administrators.
 
@@ -20,6 +20,10 @@ The statement may seem simple, but in real-world scenarios, many constraints and
 
 * **Application resource needs**: Each application (or pod) has desired resource requirements (CPU, memory). This desired requirement is assumed to be the pod resource requests.
 * **Node types and costs**: A Cloud provider offers a finite discrete number of machine types with different resource capacities and costs.
+
+### How to Mathematically Model this Problem?
+
+### MIP Problem Formulation
 
 Here's a basic MIP formulation for the Kubernetes node sizing problem. This can be further extended to include more complex scenarios.
 

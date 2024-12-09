@@ -13,7 +13,7 @@ param M; # A large constant
 
 # Decision Variables
 
-var x{a in APPLICATIONS, n in NODES} binary; # 1 if replica 'r' of 'a' is on node 'n', 0 otherwise
+var x{a in APPLICATIONS, n in NODES} binary; # 1 if application 'a' is on node 'n', 0 otherwise
 var y{n in NODES} integer >= 0; # Number of nodes of type 'n'
 
 # Objective Function
