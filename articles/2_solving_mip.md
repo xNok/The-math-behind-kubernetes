@@ -36,4 +36,6 @@ end;
 
 [GLPK](https://github.com/firedrakeproject/glpk) stands for GNU Linear Programming Kit. It's a free and open-source software package used for solving large-scale linear programming (LP), mixed-integer programming (MIP), and other related optimization problems. Concretely it is an implementation of common MIP resolution algorism including [simplex method](https://en.wikipedia.org/wiki/Simplex_algorithm) and [branch-and-cut method](https://en.wikipedia.org/wiki/Branch_and_cut). We won't go to much in the detail of those algorithm in this article but essential the `simplex method` is used to solve LP problems and `branch-and-cut` finds integers solution for the corresponding MIP problems.
 
-
+```bash
+brew install glpk
+```

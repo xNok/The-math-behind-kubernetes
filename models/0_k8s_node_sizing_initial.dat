@@ -1,0 +1,17 @@
+set APPLICATIONS := app1 app2;
+set NODES := node_small node_large;
+set RESOURCES := cpu memory;
+
+param r :  cpu memory :=
+  app1  1   2
+  app2  2   4 ;
+
+param c :  cpu memory :=
+  node_small  4   8
+  node_large  8  16 ;
+
+param cost :=
+  node_small  10
+  node_large  20 ;
+
+param M := 100;
