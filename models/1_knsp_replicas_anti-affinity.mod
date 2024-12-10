@@ -34,13 +34,13 @@ s.t. ApplicationAssignment{a in APPLICATIONS, s in REPLICAS[a]}:
 
 ## 2. Resource Capacity: Total demand cannot exceed node capacity
 
-s.t. ResourceCapacity{n in NODES, i in 1..max_nodes, resource in RESOURCES}:
-  sum{a in APPLICATIONS, s in REPLICAS[a]} r[a,resource] * x[a,s,n,i] <= c[n,resource] * y[n];
+s.t. ResourceCapacity{n in NODES, resource in RESOURCES}:
+  sum{a in APPLICATIONS, s in REPLICAS[a], i in 1..max_nodes} r[a,resource] * x[a,s,n,i] <= c[n,resource] * y[n];
 
 ## 3. Node Count: Ensure at least one node if any replica is assigned
 
-s.t. NodeCount{n in NODES}: 
-  sum{a in APPLICATIONS,  s in REPLICAS[a], i in 1..max_nodes} x[a,s,n,i] = y[n];
+s.t. NodeCount{n in NODES, a in APPLICATIONS,  s in REPLICAS[a]}: 
+  sum{i in 1..max_nodes} x[a,s,n,i] <= y[n];
 
 ## 4. Replica Anti-Affinity: Replicas of the same application on different nodes
 
