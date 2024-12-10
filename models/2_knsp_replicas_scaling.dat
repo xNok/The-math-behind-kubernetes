@@ -1,11 +1,11 @@
 set APPLICATIONS := app1 app2 app3;
-set NODE_TYPES := node_small node_large;
+set NODE_TYPES := node_small node_large node_xlarge ;
 set RESOURCES := cpu memory;
 set TIME_INTERVALS := 1 2 3;
 
 param replicas : 1 2 3 :=
-  app1  2    3    1
-  app2  1    2    3
+  app1  2    3    2
+  app2  2    5    3
   app3  3    3    2 ;
 
 param r :  cpu memory :=
@@ -14,9 +14,11 @@ param r :  cpu memory :=
   app3  6   6 ;
 
 param c :  cpu memory :=
-  node_small  4   8
-  node_large  8  16 ;
+  node_small    4    8
+  node_large    8   16
+  node_xlarge  12   24 ;
 
 param cost :=
-  node_small  10
-  node_large  19 ;
+  node_small   10
+  node_large   19
+  node_xlarge  28 ;
