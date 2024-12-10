@@ -10,7 +10,7 @@ find ./models -name "${prefix}*.mod" -print0 | while IFS= read -r -d '' file; do
   filename="${basename%.*}"
 
   # Construct the glpsol command
-  glpsol_command="glpsol -m ./models/${filename}.mod -d ./models/${filename}.dat"
+  glpsol_command="glpsol -m ./models/${filename}.mod -d ./models/${filename}.dat --cuts"
 
   # Execute the glpsol command
   echo "Executing: $glpsol_command"
