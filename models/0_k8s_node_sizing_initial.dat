@@ -5,7 +5,7 @@ set RESOURCES := cpu memory;
 param r :  cpu memory :=
   app1  1   2
   app2  2   4
-  app3  4   6 ;
+  app3  6   6 ;
 
 param c :  cpu memory :=
   node_small  4   8
@@ -13,6 +13,6 @@ param c :  cpu memory :=
 
 param cost :=
   node_small  10
-  node_large  20 ;
+  node_large  19 ;
 
 param M := 100;
