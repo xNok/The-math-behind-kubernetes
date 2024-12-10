@@ -10,8 +10,6 @@ set APPLICATIONS :=
   reporting-service 
   data-warehouse-loader;
 
-set TIME_INTERVALS := 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23;
-
 # Replicas per application at each hour (with minimum 2 replicas)
 param replicas :
   0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 :=
@@ -38,3 +36,5 @@ param r :  cpu memory :=
   machine-learning-inference 0.75  2.0
   reporting-service          1.0   4.0   # More memory-intensive
   data-warehouse-loader      0.25  1.0;
+
+end;

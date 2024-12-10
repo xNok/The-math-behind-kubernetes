@@ -1,13 +1,13 @@
 set NODE_TYPES :=
-  n2-standard-2
-  n2-standard-4
-  n2-standard-8
-  n2-highcpu-2
-  n2-highcpu-4
-  n2-highcpu-8
-  n2-highmem-2
-  n2-highmem-4
-  n2-highmem-8;
+  c4-standard-2
+  c4-standard-4
+  c4-standard-8
+  c4-highcpu-2
+  c4-highcpu-4
+  c4-highcpu-8
+  c4-highmem-2
+  c4-highmem-4
+  c4-highmem-8;
 
 param c :  cpu memory :=
   c4-standard-2  2    7
@@ -30,3 +30,5 @@ param c :  cpu memory :=
   c4-highmem-2   0.128
   c4-highmem-4   0.260
   c4-highmem-8   0.521;
+
+end;
