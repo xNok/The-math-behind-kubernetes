@@ -1,0 +1,40 @@
+set APPLICATIONS := 
+  web-server 
+  api-gateway 
+  batch-processor 
+  message-queue 
+  cache-service 
+  database-replica 
+  streaming-analytics 
+  machine-learning-inference 
+  reporting-service 
+  data-warehouse-loader;
+
+set TIME_INTERVALS := 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23;
+
+# Replicas per application at each hour (with minimum 2 replicas)
+param replicas :
+  0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 :=
+  web-server                 2    2    2    2    2    2    2    3    5    6    7    8   10    8    7    6    5    6    8    6    5    4    3    2
+  api-gateway                2    2    2    2    2    2    2    2    3    4    5    5    6    5    4    4    3    3    5    4    3    2    2    2
+  batch-processor            3    3    2    2    2    2    3    4    6    7    8    8   10    8    7    7    6    7    9    7    6    5    4    3
+  message-queue              2    2    2    2    2    2    2    2    3    3    4    4    5    4    3    3    3    3    4    3    3    2    2    2
+  cache-service              2    2    2    2    2    2    2    3    4    5    6    6    8    7    6    5    5    5    7    6    5    4    3    2
+  database-replica           2    2    2    2    2    2    2    2    2    3    3    3    4    3    3    3    2    2    3    3    2    2    2    2
+  streaming-analytics        2    2    2    2    2    2    2    3    4    5    5    6    7    6    6    5    5    6    7    6    5    4    3    2
+  machine-learning-inference 2    2    2    2    2    3    3    4    5    6    7    7    8    7    6    6    5    5    7    6    5    4    3    2
+  reporting-service          2    2    2    2    2    2    2    2    3    4    4    5    6    5    4    4    4    4    5    4    3    3    2    2
+  data-warehouse-loader      2    2    2    2    2    2    2    2    3    3    4    4    5    4    4    3    3    3    4    3    3    2    2    2;
+
+# Resource requirements in "cpu units" and "GB of memory"
+param r :  cpu memory :=
+  web-server                 0.25  0.5
+  api-gateway                0.5   1.0
+  batch-processor            0.75  1.5
+  message-queue              0.5   1.0
+  cache-service              0.25  0.5
+  database-replica           1.0   2.0   # Slightly more memory-intensive
+  streaming-analytics        0.5   1.0
+  machine-learning-inference 0.75  2.0
+  reporting-service          1.0   4.0   # More memory-intensive
+  data-warehouse-loader      0.25  1.0;

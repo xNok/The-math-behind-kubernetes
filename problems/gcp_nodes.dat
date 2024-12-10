@@ -1,0 +1,32 @@
+set NODE_TYPES :=
+  n2-standard-2
+  n2-standard-4
+  n2-standard-8
+  n2-highcpu-2
+  n2-highcpu-4
+  n2-highcpu-8
+  n2-highmem-2
+  n2-highmem-4
+  n2-highmem-8;
+
+param c :  cpu memory :=
+  c4-standard-2  2    7
+  c4-standard-4  4   15
+  c4-standard-8  8   30
+  c4-highcpu-2   2    4
+  c4-highcpu-4   4    8
+  c4-highcpu-8   8   16
+  c4-highmem-2   2   15
+  c4-highmem-4   4   31
+  c4-highmem-8   8   62;
+
+ param cost :=
+  c4-standard-2  0.096  
+  c4-standard-4  0.197
+  c4-standard-8  0.395
+  c4-highcpu-2   0.118
+  c4-highcpu-4   0.236
+  c4-highcpu-8   0.472
+  c4-highmem-2   0.128
+  c4-highmem-4   0.260
+  c4-highmem-8   0.521;
