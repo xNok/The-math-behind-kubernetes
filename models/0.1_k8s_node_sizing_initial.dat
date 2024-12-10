@@ -15,8 +15,4 @@ param cost :=
   node_small  10
   node_large  19 ;
 
-param max_node :=
-    node_small  10
-    node_large  10 ;
-
 param M := 100;
