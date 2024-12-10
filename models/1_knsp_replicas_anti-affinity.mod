@@ -20,7 +20,7 @@ param max_nodes{n in NODE_TYPES} := # Maximum number of nodes of type 'n'
 # Decision Variables
 
 var x{a in APPLICATIONS, s in 1..replicas[a], n in NODE_TYPES, i in 1..max_nodes[n]} binary; # 1 if replica 's' of 'a' is on node 'n', 0 otherwise
-var y{n in NODE_TYPES, i in 1..max_nodes[n]} integer >= 0; # 1 if node 'i' if type 'n' is used;
+var y{n in NODE_TYPES, i in 1..max_nodes[n]} binary; # 1 if node 'i' if type 'n' is used;
 
 # Objective Function
 
