@@ -14,7 +14,7 @@ Here is a list of articles I wrote about managing Kubernetes Cluster and Improvi
 ## MIP Kubernetes Node Sizing Problem 
 
 ```bash
-glpsol -m ./models/2.1_knsp_replicas_scaling.mod \
+glpsol -m ./models/2.2_knsp_replicas_scaling.mod \
     -d ./problems/app_1.dat \
     -d ./problems/gcp_nodes.dat \
     -d ./problems/general.dat \

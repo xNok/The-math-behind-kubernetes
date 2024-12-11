@@ -14,9 +14,13 @@ param replicas{a in APPLICATIONS, t in TIME_INTERVALS}; # Number of replicas for
 
 # Parameters for modeling hacks
 
+param max_nodes_overflow := 2;
+
 param max_nodes{n in NODE_TYPES} := # Maximum number of nodes of type 'n'
   max {resource in RESOURCES, t in TIME_INTERVALS}
-    ceil(sum{a in APPLICATIONS, s in 1..replicas[a,t]} r[a,resource] / c[n,resource]) * 1.5;
+    ceil(sum{a in APPLICATIONS, s in 1..replicas[a,t]} r[a,resource] / c[n,resource]) * max_nodes_overflow;
+
+param max_node_types;  # Maximum number of node types allowed
 
 # Sets for modeling convenience
 
@@ -61,7 +65,7 @@ s.t. AntiDescheduling{t1 in TIME_INTERVALS, t2 in TIME_INTERVALS, a in APPLICATI
 
 # Symmetry Breaking Constraints:
 
-## 1. Ensure that node instance i is used then i-1 is also used
+## 1. Ensure that node instance i is used than i-1 is also used
 
 s.t. PreferSmallNodeIndices{(n,i) in NODE_INSTANCES, t in TIME_INTERVALS: i > 1}:
   y[t,n,i] <= y[t,n,i-1];
@@ -71,6 +75,16 @@ s.t. PreferSmallNodeIndices{(n,i) in NODE_INSTANCES, t in TIME_INTERVALS: i > 1}
 s.t. PreferMoreApplications{t in TIME_INTERVALS, (n,i) in NODE_INSTANCES: i > 1}:
   sum{(a,s) in APPLICATION_REPLICAS[t]} x[t,a,s,n,i] <= sum{(a,s) in APPLICATION_REPLICAS[t]} x[t,a,s,n,i-1];
 
+## 3. Resource Capacity: Total demand cannot exceed node total capacity
+
+s.t. ResourceTotalCapacity{t in TIME_INTERVALS, resource in RESOURCES}:
+  sum{(a,s) in APPLICATION_REPLICAS[t], (n,i) in NODE_INSTANCES} r[a,resource] * x[t,a,s,n,i] <= sum{(n,i) in NODE_INSTANCES} c[n,resource] * y[t,n,i];
+
+# Problem reduction constrains
+
+s.t. MaxNodeTypeCount{t in TIME_INTERVALS}:
+  sum{n in NODE_TYPES} y[t,n,1] <= max_node_types;
+
 # Solve the model
 
 solve;
@@ -78,8 +92,8 @@ solve;
 # Postprocessing
 
 ## Compute the total number of node of each type
-param node_count{t in TIME_INTERVALS, n in NODE_TYPES} := sum{i in 1..max_nodes[n]} y[t,n,i];
 
+param node_count{t in TIME_INTERVALS, n in NODE_TYPES} := sum{i in 1..max_nodes[n]} y[t,n,i];
 
 # Output the solution
 
