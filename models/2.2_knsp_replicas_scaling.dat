@@ -23,4 +23,4 @@ param cost :=
   node_large   19
   node_xlarge  28 ;
 
-param max_node_types := 1;
+param max_node_types := 2;

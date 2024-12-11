@@ -67,15 +67,20 @@ s.t. AntiDescheduling{t1 in TIME_INTERVALS, t2 in TIME_INTERVALS, a in APPLICATI
 
 ## 1. Ensure that node instance i is used than i-1 is also used
 
-s.t. PreferSmallNodeIndices{(n,i) in NODE_INSTANCES, t in TIME_INTERVALS: i > 1}:
+s.t. PreferSmallNodeIndices{t in TIME_INTERVALS, (n,i) in NODE_INSTANCES: i > 1}:
   y[t,n,i] <= y[t,n,i-1];
 
-## 2. Ensure that node instances with smaller indices are contain the most applications
+## 2. Ensure that replicas s is assigned to node i there is as least a replicas assigne to a node i-1
+
+s.t. PreferSmallReplicasIndices{t in TIME_INTERVALS, (n,i) in NODE_INSTANCES, (a,s) in APPLICATION_REPLICAS[t] : i > 1 and s > 1}:
+  x[t,a,s,n,i] <= sum{(a,s2) in APPLICATION_REPLICAS[t]} x[t,a,s2,n,i-1];
+
+## 3. Ensure that node instances with smaller indices are contain the most applications
 
 s.t. PreferMoreApplications{t in TIME_INTERVALS, (n,i) in NODE_INSTANCES: i > 1}:
   sum{(a,s) in APPLICATION_REPLICAS[t]} x[t,a,s,n,i] <= sum{(a,s) in APPLICATION_REPLICAS[t]} x[t,a,s,n,i-1];
 
-## 3. Resource Capacity: Total demand cannot exceed node total capacity
+## 4. Resource Capacity: Total demand cannot exceed node total capacity (Lazy constaint)
 
 s.t. ResourceTotalCapacity{t in TIME_INTERVALS, resource in RESOURCES}:
   sum{(a,s) in APPLICATION_REPLICAS[t], (n,i) in NODE_INSTANCES} r[a,resource] * x[t,a,s,n,i] <= sum{(n,i) in NODE_INSTANCES} c[n,resource] * y[t,n,i];
