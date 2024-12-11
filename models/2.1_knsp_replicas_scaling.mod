@@ -64,6 +64,9 @@ s.t. AntiDescheduling{t1 in TIME_INTERVALS, t2 in TIME_INTERVALS, a in APPLICATI
 s.t. PreferSmallNodeIndices{(n,i) in NODE_INSTANCES, t in TIME_INTERVALS: i > 1}:
   y[t,n,i] <= y[t,n,i-1];
 
+s.t. PreferSmallReplicasIndices{t in TIME_INTERVALS, (n,i) in NODE_INSTANCES: i > 1}:
+  sum{(a,s) in APPLICATION_REPLICAS[t]} x[t,a,s,n,i] <= sum{(a,s) in APPLICATION_REPLICAS[t]} x[t,a,s,n,i-1];
+
 # Solve the model
 
 solve;

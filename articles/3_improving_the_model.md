@@ -67,3 +67,8 @@ s.t. ResourceCapacity{n in NODES, resource in RESOURCES}:
 +  x[a,s1,n] + x[a,s2,n] <= 1; 
 ```
 
+
+## Refs
+
+* https://jmsallan.netlify.app/blog/breaking-symmetry-in-linear-programming-formulation/
+* https://www.researchgate.net/publication/346110904_An_Experimental_Study_on_Symmetry_Breaking_Constraints_Impact_for_the_One_Dimensional_Bin-Packing_Problem

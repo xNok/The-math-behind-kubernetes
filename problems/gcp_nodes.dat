@@ -1,3 +1,5 @@
+# ref: https://gcloud-compute.com/grid.html
+
 set NODE_TYPES :=
   c4-standard-2
   c4-standard-4
@@ -21,14 +23,14 @@ param c :  cpu memory :=
   c4-highmem-8   8   62;
 
  param cost :=
-  c4-standard-2  0.096  
-  c4-standard-4  0.197
-  c4-standard-8  0.395
-  c4-highcpu-2   0.118
-  c4-highcpu-4   0.236
-  c4-highcpu-8   0.472
-  c4-highmem-2   0.128
-  c4-highmem-4   0.260
-  c4-highmem-8   0.521;
+  c4-standard-2  0.0969
+  c4-standard-4  0.1977
+  c4-standard-8  0.3953
+  c4-highcpu-2   0.0851
+  c4-highcpu-4   0.1701
+  c4-highcpu-8   0.3402
+  c4-highmem-2   0.1284
+  c4-highmem-4   0.2607
+  c4-highmem-8   0.5214;
 
 end;
