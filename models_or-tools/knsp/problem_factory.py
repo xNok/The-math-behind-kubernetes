@@ -1,5 +1,3 @@
-import math
-
 from ortools.sat.cp_model_pb2 import CpSolverStatus
 
 from .problem_model import *
@@ -13,6 +11,7 @@ class ProblemFactory:
         self.model: cp_model.CpModel = cp_model.CpModel()
         self.variable_definition_functions: List[VariableDefinitionInterface] = []
         self.constraint_definition_functions: List[ConstraintDefinitionInterface] = []
+        self.parameter_definition_functions: List[ParamDefinitionInterface] = []
         self.objective_function: ObjectiveDefinitionInterface | None = None
         self.solution_extraction_function: SolutionExtractionInterface | None = None
         self.variables: Dict[str, Any] = {}
@@ -29,6 +28,12 @@ class ProblemFactory:
             raise TypeError("The provided object must be an instance of ConstraintDefinitionInterface")
         self.constraint_definition_functions.append(constraint_definition)
 
+    def register_params(self, param_definition: ParamDefinitionInterface) -> None:
+        """Register a function to compute some of the problem parameters"""
+        if not isinstance(param_definition, ParamDefinitionInterface):
+            raise TypeError("The provided object must be an instance of ParamDefinitionInterface")
+        self.parameter_definition_functions.append(param_definition)
+
     def register_objective_function(self, objective_definition: ObjectiveDefinitionInterface) -> None:
         """Registers the objective function object."""
         if not isinstance(objective_definition, ObjectiveDefinitionInterface):
@@ -43,26 +48,11 @@ class ProblemFactory:
 
     def create_problem(self) -> cp_model.CpModel:
         """Creates the model, variables, constraints, and objective."""
-        self._calculate_max_nodes()
+        self._define_params()
         self._define_variables()
         self._define_constraints()
         self._define_objective()
         return self.model
-
-    def _calculate_max_nodes(self) -> None:
-        """Calculates the maximum number of nodes needed for each type."""
-        self.problem_data["max_nodes"] = {}
-
-        applications: Applications = self.problem_data["applications"]
-        resources: Resources = self.problem_data["resources"]
-        r: ResourceRequirements = self.problem_data["r"]
-        c: ResourceCapacities = self.problem_data["c"]
-
-        for n in self.problem_data["node_types"]:
-            self.problem_data["max_nodes"][n] = max(
-                math.ceil(sum(r[a][resource] for a in applications) / c[n][resource])
-                for resource in resources
-            ) + 1
 
     def _define_variables(self) -> None:
         """Defines the variables using the registered functions."""
@@ -73,6 +63,11 @@ class ProblemFactory:
         """Defines the constraints using the registered functions."""
         for func in self.constraint_definition_functions:
             func.add_constraint(self.model, self.variables, self.problem_data)
+
+    def _define_params(self) -> None:
+        """Define computed problem parameters"""
+        for func in self.parameter_definition_functions:
+            self.problem_data = func.add_param(self.problem_data)
 
     def _define_objective(self) -> None:
         """Defines the objective function."""

@@ -8,12 +8,16 @@ from knsp.constraints.node_count import NodeCountConstraintWithReplicas
 from knsp.constraints.application_anti_affinity import ReplicaAntiAffinityConstraint
 from knsp.objectives.default import DefaultObjective
 from knsp.solutions.default import SolutionExtractorWithReplicas
+from knsp.params.max_nodes import MaxNodeWithReplicas
 
 def solve_1_knsp(pd: ProblemData):
     """
     Solves the kubernetes node sizing problem using a minimal set of constraints.
     """
     problem_factory = ProblemFactory(pd)
+
+    # Register param resolver function
+    problem_factory.register_params(MaxNodeWithReplicas())
 
     # Register default variable definition functions
     problem_factory.register_variables(ApplicationReplicasPlacementVariables())

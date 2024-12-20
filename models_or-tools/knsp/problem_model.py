@@ -70,6 +70,21 @@ class ConstraintDefinitionInterface(ABC):
         """
         pass
 
+class ParamDefinitionInterface(ABC):
+    """Interface for params definition functions."""
+    @abstractmethod
+    def add_param(self, problem_data: ProblemData) -> ProblemData:
+        """
+        Adds a computed parameter to the problem data.
+
+        Args:
+            problem_data: A dictionary containing problem data.
+
+        Return:
+            the updated problem datq
+        """
+        pass
+
 class ObjectiveDefinitionInterface(ABC):
     """Interface for the objective definition function."""
     @abstractmethod

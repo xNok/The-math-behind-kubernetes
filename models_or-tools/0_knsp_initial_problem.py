@@ -7,12 +7,16 @@ from knsp.constraints.node_resource_capacity import NodeResourceCapacityConstrai
 from knsp.constraints.node_count import NodeCountConstraint
 from knsp.objectives.default import DefaultObjective
 from knsp.solutions.default import DefaultSolutionExtractor
+from knsp.params.max_nodes import MaxNode
 
 def solve_0_knsp(pd: ProblemData):
     """
     Solves the kubernetes node sizing problem using a minimal set of constraints.
     """
     problem_factory = ProblemFactory(pd)
+
+    # Register param resolver function
+    problem_factory.register_params(MaxNode())
 
     # Register default variable definition functions
     problem_factory.register_variables(ApplicationPlacementVariables())
