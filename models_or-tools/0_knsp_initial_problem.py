@@ -1,7 +1,7 @@
 from knsp.problem_factory import ProblemFactory
 from knsp.problem_model import ProblemData
 from knsp.variables import ApplicationPlacementVariables, NodeSelectionVariables
-from knsp.constraints import ApplicationAssignmentConstraint
+from knsp.constraints import ApplicationAssignmentConstraint, NodeResourceCapacityConstraint, NodeCountConstraint
 from knsp.objectives.default import DefaultObjective
 from knsp.solutions.default import DefaultSolutionExtractor
 
@@ -17,8 +17,8 @@ def solve_knsp(pd: ProblemData):
 
     # Register default constraint definition functions
     problem_factory.register_constraints(ApplicationAssignmentConstraint())
-    # problem_factory.register_constraints(add_resource_capacity_constraint)
-    # problem_factory.register_constraints(add_node_count_constraint)
+    problem_factory.register_constraints(NodeResourceCapacityConstraint())
+    problem_factory.register_constraints(NodeCountConstraint())
 
     # Register the default objective function
     problem_factory.register_objective_function(DefaultObjective())

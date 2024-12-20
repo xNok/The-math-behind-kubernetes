@@ -10,6 +10,7 @@ Applications = NewType('Applications', List[Application])
 
 # Define Resource type
 Resource = NewType('Resource', str)
+Resources = NewType('Resources', List[Resource])
 
 # Define NodeType type
 NodeType = NewType('NodeType', str)

@@ -1,6 +1,6 @@
 from ortools.sat.cp_model_pb2 import CpSolverStatus
 
-from problem_model import *
+from .problem_model import *
 
 class ProblemFactory:
     """
