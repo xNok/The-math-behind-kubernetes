@@ -4,7 +4,7 @@
 prefix="$1"
 
 # Find all files in the ./models directory that start with the prefix
-find ./models -name "${prefix}*.mod" -print0 | while IFS= read -r -d '' file; do
+find ./models_MathProg -name "${prefix}*.mod" -print0 | while IFS= read -r -d '' file; do
   # Extract the base filename without extension
   basename=$(basename "$file")
   filename="${basename%.*}"
