@@ -1,33 +1,35 @@
 from knsp.problem_factory import ProblemFactory
 from knsp.problem_model import ProblemData
+from knsp.variables.application_placement import ApplicationReplicasPlacementVariables
 from knsp.variables.node_selection import NodeSelectionVariables
-from knsp.variables.application_placement import ApplicationPlacementVariables
-from knsp.constraints.application_assignment import ApplicationAssignmentConstraint
-from knsp.constraints.node_resource_capacity import NodeResourceCapacityConstraint
-from knsp.constraints.node_count import NodeCountConstraint
+from knsp.constraints.application_assignment import ReplicaAssignmentConstraint
+from knsp.constraints.node_resource_capacity import NodeResourceCapacityConstraintWithReplicas
+from knsp.constraints.node_count import NodeCountConstraintWithReplicas
+from knsp.constraints.application_anti_affinity import ReplicaAntiAffinityConstraint
 from knsp.objectives.default import DefaultObjective
-from knsp.solutions.default import DefaultSolutionExtractor
+from knsp.solutions.default import SolutionExtractorWithReplicas
 
-def solve_0_knsp(pd: ProblemData):
+def solve_1_knsp(pd: ProblemData):
     """
     Solves the kubernetes node sizing problem using a minimal set of constraints.
     """
     problem_factory = ProblemFactory(pd)
 
     # Register default variable definition functions
-    problem_factory.register_variables(ApplicationPlacementVariables())
+    problem_factory.register_variables(ApplicationReplicasPlacementVariables())
     problem_factory.register_variables(NodeSelectionVariables())
 
     # Register default constraint definition functions
-    problem_factory.register_constraints(ApplicationAssignmentConstraint())
-    problem_factory.register_constraints(NodeResourceCapacityConstraint())
-    problem_factory.register_constraints(NodeCountConstraint())
+    problem_factory.register_constraints(ReplicaAssignmentConstraint())
+    problem_factory.register_constraints(NodeResourceCapacityConstraintWithReplicas())
+    problem_factory.register_constraints(NodeCountConstraintWithReplicas())
+    problem_factory.register_constraints(ReplicaAntiAffinityConstraint())
 
     # Register the default objective function
     problem_factory.register_objective_function(DefaultObjective())
 
     # Register the default solution extraction function
-    problem_factory.register_solution_extraction_function(DefaultSolutionExtractor())
+    problem_factory.register_solution_extraction_function(SolutionExtractorWithReplicas())
 
     problem_factory.create_problem()
     return problem_factory.solve()
@@ -37,7 +39,12 @@ def solve_0_knsp(pd: ProblemData):
 problem_data = {
     "applications": ["A1", "A2", "A3"],
     "resources": ["CPU", "RAM"],
-    "node_types": ["N1", "N2"],
+    "node_types": ["N1", "N2", "N3"],
+    "replicas": {
+      "A1": 2,
+      "A2": 1,
+      "A3": 3,
+    },
     "r": {
         "A1": {"CPU": 2, "RAM": 2},
         "A2": {"CPU": 2, "RAM": 4},
@@ -46,11 +53,12 @@ problem_data = {
     "c": {
         "N1": {"CPU": 4, "RAM": 8},
         "N2": {"CPU": 8, "RAM": 16},
+        "N3": {"CPU": 16, "RAM": 32},
     },
-    "cost": {"N1": 10, "N2": 19},
+    "cost": {"N1": 10, "N2": 19, "N3": 28},
 }
 
-optimal_cost, assignment, node_counts = solve_0_knsp(problem_data)
+optimal_cost, assignment, node_counts = solve_1_knsp(problem_data)
 
 if optimal_cost is not None:
     print(f"Total cost: {optimal_cost}")

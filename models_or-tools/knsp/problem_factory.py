@@ -1,3 +1,5 @@
+import math
+
 from ortools.sat.cp_model_pb2 import CpSolverStatus
 
 from .problem_model import *
@@ -50,11 +52,17 @@ class ProblemFactory:
     def _calculate_max_nodes(self) -> None:
         """Calculates the maximum number of nodes needed for each type."""
         self.problem_data["max_nodes"] = {}
+
+        applications: Applications = self.problem_data["applications"]
+        resources: Resources = self.problem_data["resources"]
+        r: ResourceRequirements = self.problem_data["r"]
+        c: ResourceCapacities = self.problem_data["c"]
+
         for n in self.problem_data["node_types"]:
             self.problem_data["max_nodes"][n] = max(
-                int(sum(self.problem_data["r"][a][resource] for a in self.problem_data["applications"]) / self.problem_data["c"][n][resource]) + 1
-                for resource in self.problem_data["resources"]
-            ) if all(self.problem_data["c"][n][res] > 0 for res in self.problem_data["resources"]) else len(self.problem_data["applications"])
+                math.ceil(sum(r[a][resource] for a in applications) / c[n][resource])
+                for resource in resources
+            ) + 1
 
     def _define_variables(self) -> None:
         """Defines the variables using the registered functions."""
@@ -74,6 +82,9 @@ class ProblemFactory:
     def solve(self) -> tuple[float, dict[NodeType, list[list[Application]]], dict[NodeType, int]] | tuple[None, None, None]:
         """Solves the problem created by the factory."""
         solver: cp_model.CpSolver = cp_model.CpSolver()
+
+        self.model.ExportToFile("model.txt")
+
         status: CpSolverStatus = solver.Solve(self.model)
 
         if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:

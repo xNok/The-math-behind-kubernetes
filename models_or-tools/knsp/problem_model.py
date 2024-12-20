@@ -8,6 +8,10 @@ from typing import Dict, List, Any, NewType
 Application = NewType('Application', str)
 Applications = NewType('Applications', List[Application])
 
+# Define Replica type
+Replica = NewType('Replicat', int)
+Replicas = NewType('Replicas', Dict[Application, Replica])
+
 # Define Resource type
 Resource = NewType('Resource', str)
 Resources = NewType('Resources', List[Resource])
