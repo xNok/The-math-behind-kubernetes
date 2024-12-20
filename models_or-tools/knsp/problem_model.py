@@ -12,6 +12,9 @@ Applications = NewType('Applications', List[Application])
 Replica = NewType('Replicat', int)
 Replicas = NewType('Replicas', Dict[Application, Replica])
 
+ReplicaWithTime = NewType('ReplicaWithTime', List[int])
+ReplicasWithTime = NewType('ReplicasWithTime', Dict[Application, ReplicaWithTime])
+
 # Define Resource type
 Resource = NewType('Resource', str)
 Resources = NewType('Resources', List[Resource])
