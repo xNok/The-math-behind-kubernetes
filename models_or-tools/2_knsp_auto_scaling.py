@@ -6,6 +6,7 @@ from knsp.constraints.application_assignment import ReplicaAssignmentConstraintW
 from knsp.constraints.node_resource_capacity import NodeResourceCapacityConstraintWithReplicasWithTimeIntervals
 from knsp.constraints.node_count import NodeCountConstraintWithReplicasWithTimeIntervals
 from knsp.constraints.application_anti_affinity import ReplicaAntiAffinityConstraintWithTimeIntervals
+from knsp.constraints.application_anti_descheduling import ReplicasAntiDeschedulingVariables
 from knsp.objectives.default import TimeBaseObjective
 from knsp.solutions.timebased import SolutionExtractorWithReplicasWithTimeIntervals
 from knsp.params.max_nodes import MaxNodeWithReplicasWithTimeIntervals
@@ -28,6 +29,7 @@ def solve_2_knsp(pd: ProblemData):
     problem_factory.register_constraints(NodeResourceCapacityConstraintWithReplicasWithTimeIntervals())
     problem_factory.register_constraints(NodeCountConstraintWithReplicasWithTimeIntervals())
     problem_factory.register_constraints(ReplicaAntiAffinityConstraintWithTimeIntervals())
+    problem_factory.register_constraints(ReplicasAntiDeschedulingVariables())
 
     # Register the default objective function
     problem_factory.register_objective_function(TimeBaseObjective())
