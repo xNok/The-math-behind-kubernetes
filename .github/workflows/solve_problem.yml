@@ -33,4 +33,5 @@ jobs:
       - name: Run the script
         run: |
           pip freeze
-          python ./models_or-tools/problems/${{ github.event.inputs.problem }}.py
+          cd ./models_or-tools/problems
+          python ${{ github.event.inputs.problem }}.py
