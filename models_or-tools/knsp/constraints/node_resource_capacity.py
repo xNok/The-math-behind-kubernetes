@@ -4,7 +4,8 @@ from ortools.sat.python import cp_model
 
 from ..problem_model import ConstraintDefinitionInterface, Application, NodeType, Applications, NodeTypes, Resources, ResourceRequirements, ResourceCapacities, ProblemData, Replicas
 from ..variables.application_placement import ApplicationPlacementVariableType, ApplicationReplicasPlacementVariableType
-from ..variables.node_selection import NodeSelectionVariableType
+from ..variables.node_selection import NodeSelectionVariableType, NodeSelectionVariableWithTimeIntervalsType
+
 
 class NodeResourceCapacityConstraint(ConstraintDefinitionInterface):
     def add_constraint(self, model: cp_model.CpModel, variables: Dict[str, Any], problem_data: ProblemData) -> None:
@@ -55,7 +56,7 @@ class NodeResourceCapacityConstraintWithReplicasWithTimeIntervals(ConstraintDefi
     def add_constraint(self, model: cp_model.CpModel, variables: Dict[str, Any], problem_data: ProblemData) -> None:
         """Ensures resource demand does not exceed node capacity."""
         x: ApplicationReplicasPlacementVariableType = variables["x"]
-        y: NodeSelectionVariableType = variables["y"]
+        y: NodeSelectionVariableWithTimeIntervalsType = variables["y"]
 
         # dimensions
         time_intervals: int = problem_data["time_intervals"]

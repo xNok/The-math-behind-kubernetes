@@ -1,3 +1,5 @@
+from ..constraints.problem_reduction import MaxNodeTypeCountConstraint
+from ..constraints.symetry_breaking import PreferSmallNodeIndicesConstraint, PreferSmallReplicasIndicesConstraint
 from ..problem_factory import ProblemFactory
 from ..problem_model import ProblemData
 from ..variables.application_placement import ApplicationReplicasPlacementVariablesWithTimeIntervals
@@ -30,6 +32,13 @@ def solve_2_knsp(pd: ProblemData):
     problem_factory.register_constraints(NodeCountConstraintWithReplicasWithTimeIntervals())
     problem_factory.register_constraints(ReplicaAntiAffinityConstraintWithTimeIntervals())
     problem_factory.register_constraints(ReplicasAntiDeschedulingVariables())
+
+    # Register symetry breaking constraints
+    problem_factory.register_constraints(PreferSmallNodeIndicesConstraint())
+    problem_factory.register_constraints(PreferSmallReplicasIndicesConstraint())
+
+    # Register problem reduction constraints
+    problem_factory.register_constraints(MaxNodeTypeCountConstraint())
 
     # Register the default objective function
     problem_factory.register_objective_function(TimeBaseObjective())
