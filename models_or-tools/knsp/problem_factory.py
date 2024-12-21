@@ -79,8 +79,10 @@ class ProblemFactory:
         solver: cp_model.CpSolver = cp_model.CpSolver()
 
         self.model.ExportToFile("model.txt")
+        solver.parameters.log_search_progress = True
 
         status: CpSolverStatus = solver.Solve(self.model)
+
 
         if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
             if self.solution_extraction_function:
