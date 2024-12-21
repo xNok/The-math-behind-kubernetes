@@ -31,4 +31,6 @@ jobs:
           python -m pip install ./models_or-tools
 
       - name: Run the script
-        run: python ./models_or-tools/problems/${{ github.event.inputs.problem }}.py
+        run: |
+          pip freeze
+          python ./models_or-tools/problems/${{ github.event.inputs.problem }}.py
