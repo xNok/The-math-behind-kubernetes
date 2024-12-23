@@ -2,6 +2,7 @@ from knsp.models.knsp_2_auto_scaling import solve_2_knsp
 
 # Example Usage (data from the MathProg model)
 problem_data = {
+    "max_node_type": 3,
     "applications": [
         "web-server",
         "api-gateway",
@@ -89,5 +90,11 @@ if optimal_cost is not None:
             for i, apps in enumerate(assignment[t][n]):
                 if apps:
                     print(f"  Node {i+1}: {', '.join(apps)}")
+    print("----- Node Count ----- ")
+    for t in range(problem_data["time_intervals"]):
+        for n in problem_data["node_types"]:
+            if node_counts[t][n] == 0:
+                del node_counts[t][n]
+    print(node_counts)
 else:
     print("No feasible solution found.")
