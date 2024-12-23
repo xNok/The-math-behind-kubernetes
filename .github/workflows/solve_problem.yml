@@ -34,4 +34,5 @@ jobs:
         run: |
           pip freeze
           PYTHONPATH="${PYTHONPATH}:${PWD}/models_or-tools"
+          echo $PYTHONPATH
           python ./models_or-tools/problems/${{ github.event.inputs.problem }}.py
