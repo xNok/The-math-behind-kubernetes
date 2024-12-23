@@ -26,13 +26,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
-          pip install -e ./models_or-tools
+          if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+          if [ -f test-requirements.txt ]; then python -m  pip install -r test-requirements.txt; fi
+          python -m pip install -e ./models_or-tools
 
       - name: Run the script
         run: |
           pip freeze
-          PYTHONPATH="${PYTHONPATH}:${PWD}/models_or-tools"
-          echo $PYTHONPATH
+          export PYTHONPATH="${PYTHONPATH}:${PWD}/models_or-tools"
           python ./models_or-tools/problems/${{ github.event.inputs.problem }}.py
