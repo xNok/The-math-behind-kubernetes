@@ -14,13 +14,13 @@ def max_nodes(pb: ProblemData, n: str):
         ) + 1
 
 def enumerate_nodes(pb: ProblemData):
-    return [(n,i)
+    return [n
         for n in pb["node_types"]
         for i in range(max_nodes(pb, n))
     ]
 
 def enumerate_apps(pb: ProblemData):
-    return [(a,s)
+    return [a
         for a in pb["application_types"]
         for s in range(pb["applications_replicas"][a])
     ]
@@ -40,5 +40,25 @@ def solver(pb: ProblemData):
     model = cp.Model()
 
     # Constraints
-    
+
+    # 1. Application Assignment: Each application must be assigned to a node
+    for a, _ in enumerate(apps):
+        model += cp.sum(x[a, n] for n, _ in enumerate(nodes)) == 1
+
+    ## 2. Node Capacity: Total demand cannot exceed node capacity
+    for r in pb["resource_types"]:
+        for n, node in enumerate(nodes):
+            model += cp.sum(
+                    pb["applications_requests"][app][r] * x[a, n] for a, app in apps
+                ) <= pb["node_capacity"][node][r] * y[n]
+
+    model.minimize(cp.sum(y))
+    solver = cp.SolverLookup.get("ortools", model)
+
+    if solver.solve():
+        print("Solution:")
+        return model.objective_value()
+    else:
+        print("No solution found.")
+        return 0
     

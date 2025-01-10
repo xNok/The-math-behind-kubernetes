@@ -27,6 +27,6 @@ class Test(TestCase):
             "node_cost": {"N1": 10, "N2": 19},
         }
 
-        optimal_cost, assignment, node_counts = solver(problem_data)
+        optimal_cost = solver(problem_data)
 
         self.assertEqual(optimal_cost,29.0)
