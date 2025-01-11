@@ -63,8 +63,9 @@ class ProblemReps:
                 for r, _ in enumerate(self.data["resource_types"])
             ) + 1
     
-    def node_resource_utilisation(self, r: int, n: int, x) -> List[int]:
-        return [
-            self.data["applications_requests"][atype][r] * x[a, n] 
+    # Return the weight for application resource 
+    def np_applications_requests_weights(self, r: int):
+        return np.array([
+            self.data["applications_requests"][atype][r]
             for a, atype in enumerate(self.enumerate_apps())
-        ]
+        ])

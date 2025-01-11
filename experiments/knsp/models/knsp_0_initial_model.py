@@ -31,7 +31,7 @@ def solver(pb: ProblemData):
     ## 2. Node Capacity: Total demand cannot exceed node capacity
     for r, _ in enumerate(pb.data["resource_types"]):
         for n in nodes:
-            model += cp.sum(pb.node_resource_utilisation(r, n, x)) <= pb.data["node_capacity"][n][r] * y[n]
+            model += cp.sum(pb.np_applications_requests_weights(r) * x.transpose()[n]) <= pb.data["node_capacity"][n][r] * y[n]
 
     model.minimize(cp.sum(y))
     solver = cp.SolverLookup.get("ortools", model)
