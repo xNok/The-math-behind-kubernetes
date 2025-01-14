@@ -54,18 +54,35 @@ class ProblemReps:
         return np.array(self.data["node_cost"])
 
     # Transformation 
+    @lru_cache
     def max_resource_load(self, r: int):
         return sum(self.data["applications_requests"][a][r] for a, _ in enumerate(self.data["application_types"]))
 
+    @lru_cache
     def max_nodes(self, n: int):
         return max(
                 math.ceil(self.max_resource_load(r) / self.data["node_capacity"][n][r])
                 for r, _ in enumerate(self.data["resource_types"])
             ) + 1
     
-    # Return the weight for application resource 
+    # Return the weight for application resource
+    @lru_cache
     def np_applications_requests_weights(self, r: int):
         return np.array([
             self.data["applications_requests"][atype][r]
-            for a, atype in enumerate(self.enumerate_apps())
+            for _, atype in enumerate(self.enumerate_apps())
+        ])
+
+    @lru_cache
+    def np_node_capacity_weight(self, r: int):
+        return np.array([
+            self.data["node_capacity"][nType][r]
+            for _, nType in enumerate(self.enumerate_nodes())
+        ])
+
+    @lru_cache
+    def np_nodes_cost_weights(self):
+        return np.array([
+            self.data["node_cost"][ntype]
+            for _, ntype in enumerate(self.enumerate_nodes())
         ])
