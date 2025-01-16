@@ -5,43 +5,38 @@ import math
 from ..problem import ProblemData, ProblemReps
 
 def solver(pb: ProblemData):
-    # Make the proble data immutable, the hash is used for validation and caching
+    # Make the problem data immutable, the hash is used for validation and caching
     pb = ProblemReps(pb)
-
-    # Define a set of hypothetical node the load can be assigned to
-    nodes = pb.enumerate_nodes()
-    apps  = pb.enumerate_apps()
 
     # Decision variables
     # x[i][j] = 1 if application i is placed on node j, 0 otherwise
-    x = cp.boolvar(shape=(len(apps), len(nodes)), name="x")
+    x = cp.boolvar(shape=(len(pb.apps()), len(pb.nodes())), name="x")
     # y[j] = 1 if mode j is used, 0 otherwise
-    y = cp.boolvar(shape=len(nodes), name="y")
+    y = cp.boolvar(shape=len(pb.nodes()), name="y")
 
     model = cp.Model()
 
     # Constraints
 
     # 1. Application Assignment: Each application must be assigned to a node
-    for a, _ in enumerate(apps):
+    for a, _ in enumerate(pb.apps()):
         model += cp.sum(x[a]) == 1
 
     ## 2. Node Capacity: Total demand cannot exceed node capacity
     for r, _ in enumerate(pb.data["resource_types"]):
-        for n, _ in enumerate(nodes):
-            model += cp.sum(pb.np_applications_requests_weights(r) * x.transpose()[n]) <= pb.np_node_capacity_weight(r)[n] * y[n]
+        for n, _ in enumerate(pb.nodes()):
+            model += cp.sum(pb.np_application_requests_weights(r) * x.transpose()[n]) <= pb.np_node_capacity_weight(r)[n] * y[n]
 
-    ## 3. Node Count: Ensure at least one node if any replica is assigned
-    for a, _ in enumerate(apps):
-        for n, _ in enumerate(nodes):
-            model += x[a][n] <= y[n]
+    ## 3. Node Count: Ensure y[n] is one if at least one replicas is assigned
+    for a, _ in enumerate(pb.apps()):
+        model += x[a] <= y
 
-    ## 4. Replica Anti-Affinity: Replicas of the same application on different nodes
-    for n, _ in enumerate(nodes):
+    ## 4. Replicas Anti-Affinity: Replicas of the same application on different nodes
+    for n, _ in enumerate(pb.nodes()):
         lp, hp = 0, 0 # two pointer to window thru application replicas
-        for s in pb.data["applications_replicas"]:
+        for s in pb.data["application_replicas"]:
             hp += s
-            model += sum(x.transpose()[n][lp:hp]) <= 1
+            model += sum(x.transpose()[n][lp:hp]) <= max(1, s * pb.data["disruption_budget"])
             lp += s
 
     model.minimize(cp.sum(pb.np_nodes_cost_weights() * y))

@@ -21,9 +21,14 @@ class ProblemData(TypedDict):
     # The resource capacity provided for a given node type
     node_capacity: Tuple[int, ...]
     # Resource reserved by a given application
-    applications_requests: Tuple[int, ...]
+    application_requests: Tuple[int, ...]
     # Number of replicas for a given application
-    applications_replicas: Tuple[int, ...]
+    application_replicas: Tuple[int, ...]
+
+    # % of replicas that can be unavailable
+    # 100% -> they can be on same node
+    # 0% => they all are on different nodes
+    disruption_budget: int
 
 # ProblemReps provide an immutable representation of the problem 
 # also provide utility function to easily create constraints, notably numpy array operations
@@ -35,17 +40,17 @@ class ProblemReps:
         self.data = immutabledict(pb)
 
     @lru_cache
-    def enumerate_nodes(self):
+    def nodes(self):
         return [n
             for n, _ in enumerate(self.data["node_types"])
             for i in range(self.max_nodes(n))
         ]
 
     @lru_cache
-    def enumerate_apps(self):
+    def apps(self):
         return [a
             for a, _ in enumerate(self.data["application_types"])
-            for s in range(self.data["applications_replicas"][a])
+            for s in range(self.data["application_replicas"][a])
         ]
 
     # Numpy array access
@@ -56,7 +61,7 @@ class ProblemReps:
     # Transformation 
     @lru_cache
     def max_resource_load(self, r: int):
-        return sum(self.data["applications_requests"][a][r] for a, _ in enumerate(self.data["application_types"]))
+        return sum(self.data["application_requests"][a][r] for a, _ in enumerate(self.data["application_types"]))
 
     @lru_cache
     def max_nodes(self, n: int):
@@ -67,22 +72,22 @@ class ProblemReps:
     
     # Return the weight for application resource
     @lru_cache
-    def np_applications_requests_weights(self, r: int):
+    def np_application_requests_weights(self, r: int):
         return np.array([
-            self.data["applications_requests"][atype][r]
-            for _, atype in enumerate(self.enumerate_apps())
+            self.data["application_requests"][atype][r]
+            for _, atype in enumerate(self.apps())
         ])
 
     @lru_cache
     def np_node_capacity_weight(self, r: int):
         return np.array([
             self.data["node_capacity"][nType][r]
-            for _, nType in enumerate(self.enumerate_nodes())
+            for _, nType in enumerate(self.nodes())
         ])
 
     @lru_cache
     def np_nodes_cost_weights(self):
         return np.array([
             self.data["node_cost"][ntype]
-            for _, ntype in enumerate(self.enumerate_nodes())
+            for _, ntype in enumerate(self.nodes())
         ])
