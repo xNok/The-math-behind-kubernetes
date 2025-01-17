@@ -24,7 +24,7 @@ class ProblemData(TypedDict):
     node_capacity: Tuple[int, ...]
     # Resource reserved by a given application
     application_requests: Tuple[int, ...]
-    # Number of replicas for a given application
+    # Number of replicas for a given application for a given time interval
     application_replicas: Tuple[Tuple[int]]
 
     # % of replicas that can be unavailable

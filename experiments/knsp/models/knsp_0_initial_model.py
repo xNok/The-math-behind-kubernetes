@@ -2,18 +2,15 @@ import numpy as np
 import cpmpy as cp
 import math
 
-from ..problem import ProblemData, ProblemReps
+from ..problem import ProblemReps
 
 # Solve the problem for a given time interval only, by default t=0
-def create_model(pb: ProblemData, t:int = 0):
-    # Make the problem data immutable, the hash is used for validation and caching
-    pb = ProblemReps(pb)
-
+def create_model(pb: ProblemReps, t:int = 0):
     # Decision variables
     # x[i][j] = 1 if application i is placed on node j, 0 otherwise
-    x = cp.boolvar(shape=(len(pb.apps(t)), len(pb.nodes())), name="x")
+    x = cp.boolvar(shape=(len(pb.apps(t)), len(pb.nodes())), name=f"x({t})")
     # y[j] = 1 if mode j is used, 0 otherwise
-    y = cp.boolvar(shape=len(pb.nodes()), name="y")
+    y = cp.boolvar(shape=len(pb.nodes()), name=f"y({t})")
 
     model = cp.Model()
 
@@ -42,5 +39,5 @@ def create_model(pb: ProblemData, t:int = 0):
 
     model.minimize(cp.sum(pb.np_nodes_cost_weights() * y))
     
-    return model, hash(pb.data)
+    return model, x, y
     

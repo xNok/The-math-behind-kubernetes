@@ -1,7 +1,7 @@
 from unittest import TestCase
 import cpmpy as cp
 
-from knsp.problem import ProblemData
+from knsp.problem import ProblemData, ProblemReps
 from knsp.models.knsp_0_initial_model import create_model
 
 class Test(TestCase):
@@ -28,7 +28,8 @@ class Test(TestCase):
             "disruption_budget": 0
         }
 
-        model, model_hash = create_model(problem_data)
+        pb = ProblemReps(problem_data)
+        model, _, _ = create_model(pb)
         solver = cp.SolverLookup.get("ortools", model)
         solver.solve()
 
