@@ -14,6 +14,8 @@ class ProblemData(TypedDict):
     node_types: Tuple[str]
     # List of application that need to be allocated to the cluster
     application_types: Tuple[str]
+    # Number of time intervals
+    time_intervals: int
 
     # Numerical values
     # The hourly cost of a node type
@@ -23,7 +25,7 @@ class ProblemData(TypedDict):
     # Resource reserved by a given application
     application_requests: Tuple[int, ...]
     # Number of replicas for a given application
-    application_replicas: Tuple[int, ...]
+    application_replicas: Tuple[Tuple[int]]
 
     # % of replicas that can be unavailable
     # 100% -> they can be on same node
@@ -47,10 +49,10 @@ class ProblemReps:
         ]
 
     @lru_cache
-    def apps(self):
+    def apps(self, t):
         return [a
             for a, _ in enumerate(self.data["application_types"])
-            for s in range(self.data["application_replicas"][a])
+            for s in range(self.data["application_replicas"][t][a])
         ]
 
     # Numpy array access
@@ -72,10 +74,10 @@ class ProblemReps:
     
     # Return the weight for application resource
     @lru_cache
-    def np_application_requests_weights(self, r: int):
+    def np_application_requests_weights(self, r: int, t: int):
         return np.array([
             self.data["application_requests"][atype][r]
-            for _, atype in enumerate(self.apps())
+            for _, atype in enumerate(self.apps(t))
         ])
 
     @lru_cache
