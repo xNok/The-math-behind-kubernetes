@@ -1,7 +1,11 @@
-from setuptools import setup
+from setuptools import setup,find_packages
 
 setup(
     name="knsp",
-    packages=["knsp"],
-    package_dir={'knsp': 'knsp'}
+    packages=find_packages(exclude=['docs', 'tests*', 'problems']),
+    entry_points = {
+        'console_scripts': [
+            'knsp = knsp_cli.solver:main'
+        ],
+    }
 )

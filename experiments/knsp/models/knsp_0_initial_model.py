@@ -44,7 +44,6 @@ def create_model(pb: ProblemReps, t:int = 0):
         for i in range(1,pb.max_nodes(n)):
             model += y[i] <= y[i-1]
 
-
     model.minimize(cp.sum(pb.np_nodes_cost_weights() * y))
     
     return model, x, y

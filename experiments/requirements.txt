@@ -1,2 +1,4 @@
 cpmpy==0.9.23
 immutabledict==4.2.1
+docopt==0.6.2
+deepmerge==2.0
