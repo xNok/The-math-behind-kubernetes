@@ -37,6 +37,14 @@ def create_model(pb: ProblemReps, t:int = 0):
             model += sum(x.transpose()[n][lp:hp]) <= max(1, s * pb.data["disruption_budget"])
             lp += s
 
+    #### Symmetry breaking
+
+    ## 1. Ensure that node if instance i is used than i-1 is also used
+    for n, _ in enumerate(pb.data["node_types"]):
+        for i in range(1,pb.max_nodes(n)):
+            model += y[i] <= y[i-1]
+
+
     model.minimize(cp.sum(pb.np_nodes_cost_weights() * y))
     
     return model, x, y
